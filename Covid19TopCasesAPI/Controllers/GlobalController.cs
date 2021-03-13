@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using Covid19TopCasesClassLibrary;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
@@ -14,7 +12,7 @@ using RestSharp;
 namespace Covid19TopCasesAPI.Controllers
 {
     /// <summary>
-    /// Global controller of the RESTful 
+    /// Global controller of the RESTful API
     /// </summary>
     [Produces("application/json")]
     [Route("api/[controller]")]
@@ -26,6 +24,101 @@ namespace Covid19TopCasesAPI.Controllers
         public GlobalController(IConfiguration iConfig)
         {
             Configuration = iConfig;
+        }
+
+        /// <summary>
+        /// Service that provide the catalog of regions
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet(nameof(Regions))]
+        public ActionResult Regions()
+        {
+            //Response object is initialized
+            var response = new ServiceResponse()
+            {
+                Status = 0,
+                Code = string.Empty,
+                Message = string.Empty,
+                ErrorMessage = string.Empty,
+                StackTrace = string.Empty,
+                TransactionDateTime = DateTime.Now,
+                Data = new List<object>()
+            };
+
+            try
+            {
+                //Get the parameters from appsettings.json
+                var regionsCatalogEndpoint = Configuration.GetValue<string>("Covid-19APISettings:APIEndpoints:RegionsCatalog"); //Regions Catalog Endpoint
+                var xRapidApiKey = Configuration.GetValue<string>("Covid-19APISettings:Headers:x-rapidapi-key"); //API key
+                var xRapidApiHost = Configuration.GetValue<string>("Covid-19APISettings:Headers:x-rapidapi-host"); //API host
+
+                //Parameters from appsettings.json are validated
+                if (string.IsNullOrEmpty(regionsCatalogEndpoint))
+                {
+                    throw new Exception("Regions catalog endpoint is not configured");
+                }
+                if (string.IsNullOrEmpty(xRapidApiKey))
+                {
+                    throw new Exception("API key is not configured");
+                }
+                if (string.IsNullOrEmpty(xRapidApiHost))
+                {
+                    throw new Exception("API host is not configured");
+                }
+
+                //API Key is validated
+                Request.Headers.TryGetValue("x-rapidapi-key", out StringValues xApiKey);
+                if (!xRapidApiKey.ToString().Equals(xApiKey))
+                {
+                    //Request is not authorized
+                    response.Status = (int)HttpStatusCode.Unauthorized;
+                    response.Code = "ERROR";
+                    response.Message = "You are not unauthorized to do the request.";
+                    response.ErrorMessage = "401 Unauthorized";
+                    response.StackTrace = string.Empty;
+                    return StatusCode((int)HttpStatusCode.Unauthorized, response);
+                }
+
+                //RapidAPI Regions Catalog Consumption
+                IRestResponse responseCatalog = RapidAPIResponse(regionsCatalogEndpoint, Method.GET, xRapidApiKey, xRapidApiHost);
+                if ((int)responseCatalog.StatusCode == (int)HttpStatusCode.OK) //SUCCESS response from the RapidAPI (Regions Catalog)
+                {
+                    var regionCatalog = new List<RegionObject>();
+                    //Defining the "ALL" filter
+                    var allFilter = new RegionObject()
+                    {
+                        Iso = "",
+                        Name = "ALL"
+                    };
+                    regionCatalog.Add(allFilter);
+                    var regionsFromService = JsonConvert.DeserializeObject<RegionCatalog>(responseCatalog.Content).Data.OrderBy(a => a.Name).ToList();
+                    regionCatalog.AddRange(regionsFromService); //Merging the data list from RapidAPI REST service
+                    //Preparing the RESTful API Successful response
+                    response.Status = (int)responseCatalog.StatusCode;
+                    response.Code = "OK";
+                    response.Message = "Data obtained successfully";
+                    response.Data = regionCatalog;
+                    return Ok(response);
+                }
+                else //Another status code from the RapidAPI (Regions Catalog)
+                {
+                    response.Status = (int)responseCatalog.StatusCode;
+                    response.Code = "ERROR";
+                    response.Message = "An error occurred in the data query of the regions catalog, please try again later.";
+                    response.ErrorMessage = (int)responseCatalog.StatusCode + " " + responseCatalog.StatusDescription;
+                    response.StackTrace = "JSON returned from the Rapid API => " + responseCatalog.Content;
+                    return StatusCode((int)responseCatalog.StatusCode, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Status = (int)HttpStatusCode.InternalServerError;
+                response.Code = "ERROR";
+                response.Message = "An internal error occurred while obtaining the regions catalog, please try again later.";
+                response.ErrorMessage = "500 Internal Server Error | " + ex.Message;
+                response.StackTrace = ex.StackTrace;
+                return StatusCode((int)HttpStatusCode.InternalServerError, response);
+            }
         }
 
         /// <summary>
@@ -178,7 +271,7 @@ namespace Covid19TopCasesAPI.Controllers
                             });
                             response.Data = topList; //Top 10 list is added to response
                         }
-                        //Preparing the RESTful API response
+                        //Preparing the RESTful API Successful response
                         response.Status = (int)responseReport.StatusCode;
                         response.Code = "OK";
                         response.Message = "Data obtained successfully";

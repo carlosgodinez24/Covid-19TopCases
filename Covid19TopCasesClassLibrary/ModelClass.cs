@@ -46,13 +46,16 @@ namespace Covid19TopCasesClassLibrary
 
     #region Global reports from RapidAPI
     /// <summary>
-    /// 
+    /// COVID-19 global report
     /// </summary>
     public class GlobalReport
     {
         public List<GlobalData> Data { get; set; }
     }
 
+    /// <summary>
+    /// COVID-19 global data from all regions/provinces
+    /// </summary>
     public class GlobalData
     {
         public DateTime Date { get; set; }
@@ -69,6 +72,9 @@ namespace Covid19TopCasesClassLibrary
         public Region Region { get; set; }
     }
 
+    /// <summary>
+    /// Data object of regions in principal JSON
+    /// </summary>
     public class Region
     {
         public string Iso { get; set; }
@@ -79,6 +85,9 @@ namespace Covid19TopCasesClassLibrary
         public List<City> Cities { get; set; }
     }
 
+    /// <summary>
+    /// COVID-19 detail per city
+    /// </summary>
     public class City
     {
         public string Name { get; set; }
@@ -95,11 +104,17 @@ namespace Covid19TopCasesClassLibrary
     #endregion
 
     #region RESTful API Control Classes
+    /// <summary>
+    /// RESTful API request
+    /// </summary>
     public class RequestCovid19Stats
     {
         public string RegionIso { get; set; }
     }
 
+    /// <summary>
+    /// TOP 10 regions with most COVID-19 cases
+    /// </summary>
     public class TopRegionsStatistics
     {
         public string Region { get; set; }
@@ -109,6 +124,9 @@ namespace Covid19TopCasesClassLibrary
         public string DeathsStr { get; set; }
     }
 
+    /// <summary>
+    /// TOP 10 provinces with most COVID-19 cases / parameterizing region's ISO
+    /// </summary>
     public class TopProvincesStatistics
     {
         public string Province { get; set; }
@@ -118,6 +136,9 @@ namespace Covid19TopCasesClassLibrary
         public string DeathsStr { get; set; }
     }
 
+    /// <summary>
+    /// RESTful Service Response
+    /// </summary>
     public class ServiceResponse
     {
         public int Status { get; set; }
