@@ -2,7 +2,120 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@*<div class="text-center">
+        <h1 class="display-4">Welcome</h1>
+        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    </div>*@
+
+<h4 class="frm-group-header">TOP 10 COVID-19 CASES</h4>
+<hr class="frm-group-hr" />
+<main role="main" class="pb-3">
+    <div id="example">
+        <div class="form-row">
+            <div class="col-sm-4">
+                <div class="form-row col-md-12">
+                    <div class="col-4 col-sm-4">
+                        <label for="cmbRegion" class="detail-tag">Region:</label>
+                    </div>
+                    <div class="col-8 col-sm-8">
+                        <select id="cmbRegion" class="form-control" required=""></select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <a id="btnReport" class="btn btn-outline-secondary" href="#" role="button"><img src="~/img/search.png" alt="Report icon"/> Report</a>
+            </div>
+            <br /><br />
+            <div class="col-sm-2">
+                <a id="btnXML" class="btn btn-outline-secondary" href="#" role="button"><img src="~/img/xml.png" alt="XML icon"/>Export as XML</a>
+            </div>
+            <br /><br />
+            <div class="col-sm-2">
+                <a id="btnJSON" class="btn btn-outline-secondary" href="#" role="button"><img src="~/img/json.png" alt="JSON icon"/>Export as JSON</a>
+            </div>
+            <br /><br />
+            <div class="col-sm-2">
+                <a id="btnCSV" class="btn btn-outline-secondary" href="#" role="button"><img src="~/img/csv.png" alt="CSV icon"/>Export as CSV</a>
+            </div>
+        </div>
+        <br />
+        <div id="grid">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Region</th>
+                        <th scope="col">Cases</th>
+                        <th scope="col">Deaths</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>USA</td>
+                        <td>3,000,000</td>
+                        <td>823,202</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>USA</td>
+                        <td>3,000,000</td>
+                        <td>823,202</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>USA</td>
+                        <td>3,000,000</td>
+                        <td>823,202</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">4</th>
+                        <td>USA</td>
+                        <td>3,000,000</td>
+                        <td>823,202</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">5</th>
+                        <td>USA</td>
+                        <td>3,000,000</td>
+                        <td>823,202</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">6</th>
+                        <td>USA</td>
+                        <td>3,000,000</td>
+                        <td>823,202</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">7</th>
+                        <td>USA</td>
+                        <td>3,000,000</td>
+                        <td>823,202</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">8</th>
+                        <td>USA</td>
+                        <td>3,000,000</td>
+                        <td>823,202</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">9</th>
+                        <td>USA</td>
+                        <td>3,000,000</td>
+                        <td>823,202</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">10</th>
+                        <td>USA</td>
+                        <td>3,000,000</td>
+                        <td>823,202</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br />
+    </div>
+</main>
+<script>
+    window.RegionsCatalogEndpoint = "@Url.Action("Regions", "Home")";
+</script>
