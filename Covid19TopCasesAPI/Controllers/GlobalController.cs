@@ -19,7 +19,7 @@ namespace Covid19TopCasesAPI.Controllers
     [ApiController]
     public class GlobalController : ControllerBase
     {
-        public IConfiguration Configuration;
+        private readonly IConfiguration Configuration;
 
         public GlobalController(IConfiguration iConfig)
         {
@@ -83,16 +83,7 @@ namespace Covid19TopCasesAPI.Controllers
                 IRestResponse responseCatalog = RapidAPIResponse(regionsCatalogEndpoint, Method.GET, xRapidApiKey, xRapidApiHost);
                 if ((int)responseCatalog.StatusCode == (int)HttpStatusCode.OK) //SUCCESS response from the RapidAPI (Regions Catalog)
                 {
-                    var regionCatalog = new List<RegionObject>();
-                    //Defining the "ALL" filter
-                    var allFilter = new RegionObject()
-                    {
-                        Iso = "",
-                        Name = "ALL"
-                    };
-                    regionCatalog.Add(allFilter);
-                    var regionsFromService = JsonConvert.DeserializeObject<RegionCatalog>(responseCatalog.Content).Data.OrderBy(a => a.Name).ToList();
-                    regionCatalog.AddRange(regionsFromService); //Merging the data list from RapidAPI REST service
+                    var regionCatalog = JsonConvert.DeserializeObject<RegionCatalog>(responseCatalog.Content).Data.OrderBy(a => a.Name).ToList();
                     //Preparing the RESTful API Successful response
                     response.Status = (int)responseCatalog.StatusCode;
                     response.Code = "OK";
