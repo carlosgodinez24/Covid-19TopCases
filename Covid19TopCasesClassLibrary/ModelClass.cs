@@ -117,9 +117,10 @@ namespace Covid19TopCasesClassLibrary
     /// </summary>
     public class TopStatistics
     {
+        public int Item { get; set; }
         public string Name { get; set; }
-        public long Cases { get; set; }
-        public long Deaths { get; set; }
+        public long? Cases { get; set; }
+        public long? Deaths { get; set; }
         public string CasesStr { get; set; }
         public string DeathsStr { get; set; }
     }

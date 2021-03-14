@@ -9,20 +9,39 @@ using RestSharp;
 using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using System.Xml.Linq;
+using System.Linq;
+using CsvHelper;
+using System.Text;
+using System.Globalization;
 
 namespace Covid19TopCases.Controllers
 {
     public class HomeController : Controller
     {
         private readonly IConfiguration configuration;
+        private readonly IWebHostEnvironment hostingEnvironment;
 
-        public HomeController(IConfiguration iConfig)
+        /// <summary>
+        /// Global variable of region's iso
+        /// </summary>
+        public static string RegionIso { get; set; }
+        /// <summary>
+        /// Global variable of list of top statistics
+        /// </summary>
+        public static List<TopStatistics> GlobalTopStatistics { get; set; }
+
+        public HomeController(IConfiguration iConfig, IWebHostEnvironment iHostingEnvironment)
         {
             configuration = iConfig;
+            hostingEnvironment = iHostingEnvironment;
         }
 
         public IActionResult Index()
         {
+            ViewBag.DownloadedFileName = configuration.GetValue<string>("FileExportSettings:GenericFileName");
             return View();
         }
 
@@ -129,9 +148,6 @@ namespace Covid19TopCases.Controllers
                     return BadRequest(response400);
                 }
 
-                //Get ISO from request
-                var regionIso = requestCovid19Stats.RegionIso?.Trim();
-
                 //Get the JSON serialization from the object request
                 var contractResolver = new DefaultContractResolver
                 {
@@ -157,6 +173,9 @@ namespace Covid19TopCases.Controllers
                     TransactionDateTime = responseReport.TransactionDateTime,
                     Data = JsonConvert.DeserializeObject<List<TopStatistics>>(responseReport.Data.ToString())
                 };
+                //Assign values to global variables to export data
+                RegionIso = requestCovid19Stats.RegionIso?.Trim();
+                GlobalTopStatistics = JsonConvert.DeserializeObject<List<TopStatistics>>(responseReport.Data.ToString());
                 return StatusCode((int)responseAPI.StatusCode, response);
             }
             catch (Exception ex)
@@ -172,6 +191,140 @@ namespace Covid19TopCases.Controllers
                     Data = new List<object>()
                 };
                 return StatusCode((int)HttpStatusCode.InternalServerError, response);
+            }
+        }
+
+        /// <summary>
+        /// Service that download a XML file with the grid data
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet(nameof(XMLDownload))]
+        public PhysicalFileResult XMLDownload()
+        {
+            try 
+            {
+                //Get the parameters from appsettings.json
+                var genericFileName = configuration.GetValue<string>("FileExportSettings:GenericFileName");
+
+                //Parameters from appsettings.json are validated
+                if (string.IsNullOrEmpty(genericFileName))
+                {
+                    throw new Exception("Generic file name is not configured");
+                }
+                
+                //Setting the saving path of the file
+                string savePath = Path.Combine(hostingEnvironment.WebRootPath, "export", "xml", genericFileName + ".xml");
+
+                if (string.IsNullOrEmpty(RegionIso)) //Global report
+                {
+                    var xmlfromLINQ = new XElement("Regions",
+                    from stat in GlobalTopStatistics
+                        select new XElement("Region",
+                            new XElement("Item", stat.Item),
+                            new XElement("Name", stat.Name),
+                            new XElement("Cases", stat.CasesStr),
+                            new XElement("Deaths", stat.DeathsStr)
+                    ));
+                    xmlfromLINQ.Save(savePath); //Store the xml file
+                }
+                else //Report per region
+                {
+                    var xmlfromLINQ = new XElement("Provinces",
+                    from stat in GlobalTopStatistics
+                    select new XElement("Province",
+                        new XElement("Item", stat.Item),
+                        new XElement("Name", stat.Name),
+                        new XElement("Cases", stat.CasesStr),
+                        new XElement("Deaths", stat.DeathsStr)
+                    ));
+                    xmlfromLINQ.Save(savePath); //Store the xml file
+                }
+                return new PhysicalFileResult(savePath, "application/xml");
+            }
+            catch (Exception)
+            {
+                return new PhysicalFileResult(string.Empty, "application/xml");
+            }
+        }
+
+        /// <summary>
+        /// Service that download a JSON file with the grid data
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet(nameof(JSONDownload))]
+        public PhysicalFileResult JSONDownload()
+        {
+            try
+            {
+                //Get the parameters from appsettings.json
+                var genericFileName = configuration.GetValue<string>("FileExportSettings:GenericFileName");
+
+                //Parameters from appsettings.json are validated
+                if (string.IsNullOrEmpty(genericFileName))
+                {
+                    throw new Exception("Generic file name is not configured");
+                }
+
+                //Setting the saving path of the file
+                string savePath = Path.Combine(hostingEnvironment.WebRootPath, "export", "json", genericFileName + ".json");
+
+                //Get the JSON serialization from the object request
+                var contractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                };
+                var json = JsonConvert.SerializeObject(GlobalTopStatistics, new JsonSerializerSettings
+                {
+                    ContractResolver = contractResolver,
+                    NullValueHandling = NullValueHandling.Ignore,
+                    Formatting = Formatting.Indented
+                });
+
+                System.IO.File.WriteAllText(savePath, json); //Store the json file
+                return new PhysicalFileResult(savePath, "application/json");
+            }
+            catch (Exception)
+            {
+                return new PhysicalFileResult(string.Empty, "application/json");
+            }
+        }
+
+        /// <summary>
+        /// Service that download a CSV file with the grid data
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet(nameof(CSVDownload))]
+        public PhysicalFileResult CSVDownload()
+        {
+            try
+            {
+                //Get the parameters from appsettings.json
+                var genericFileName = configuration.GetValue<string>("FileExportSettings:GenericFileName");
+
+                //Parameters from appsettings.json are validated
+                if (string.IsNullOrEmpty(genericFileName))
+                {
+                    throw new Exception("Generic file name is not configured");
+                }
+
+                //Setting the saving path of the file
+                string savePath = Path.Combine(hostingEnvironment.WebRootPath, "export", "csv", genericFileName + ".csv");
+                //Writing CSV file with CSV Helper
+                using StreamWriter sw = new StreamWriter(savePath, false, new UTF8Encoding(true));
+                using CsvWriter cw = new CsvWriter(sw, CultureInfo.CreateSpecificCulture("en-US"));
+                cw.WriteHeader<TopStatistics>();
+                cw.NextRecord();
+                foreach (TopStatistics stat in GlobalTopStatistics)
+                {
+                    cw.WriteRecord(stat);
+                    cw.NextRecord();
+                }
+
+                return new PhysicalFileResult(savePath, "text/csv");
+            }
+            catch (Exception)
+            {
+                return new PhysicalFileResult(string.Empty, "text/csv");
             }
         }
 

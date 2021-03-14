@@ -50,6 +50,13 @@
     </div>
 </main>
 <script>
+    //Definition of RESTful API's endpoints
     window.RegionsCatalogEndpoint = "@Url.Action("Regions", "Home")";
     window.GlobalReportEndpoint = "@Url.Action("Report", "Home")";
+    //Definition of creation and download files endpoints
+    window.XMLDownloadEndpoint = "@Url.Action("XMLDownload", "Home")";
+    window.JSONDownloadEndpoint = "@Url.Action("JSONDownload", "Home")";
+    window.CSVDownloadEndpoint = "@Url.Action("CSVDownload", "Home")";
+    //Definition of downloaded filename
+    window.DownloadedFileName = "@ViewBag.DownloadedFileName";
 </script>

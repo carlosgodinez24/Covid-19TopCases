@@ -1,0 +1,82 @@
+[
+  {
+    "item": 1,
+    "name": "California",
+    "cases": 3620317,
+    "deaths": 56402,
+    "casesStr": "3,620,317",
+    "deathsStr": "56,402"
+  },
+  {
+    "item": 2,
+    "name": "Texas",
+    "cases": 2724607,
+    "deaths": 46366,
+    "casesStr": "2,724,607",
+    "deathsStr": "46,366"
+  },
+  {
+    "item": 3,
+    "name": "Florida",
+    "cases": 1973109,
+    "deaths": 32225,
+    "casesStr": "1,973,109",
+    "deathsStr": "32,225"
+  },
+  {
+    "item": 4,
+    "name": "New York",
+    "cases": 1734676,
+    "deaths": 48850,
+    "casesStr": "1,734,676",
+    "deathsStr": "48,850"
+  },
+  {
+    "item": 5,
+    "name": "Illinois",
+    "cases": 1207757,
+    "deaths": 23189,
+    "casesStr": "1,207,757",
+    "deathsStr": "23,189"
+  },
+  {
+    "item": 6,
+    "name": "Georgia",
+    "cases": 1032967,
+    "deaths": 18216,
+    "casesStr": "1,032,967",
+    "deathsStr": "18,216"
+  },
+  {
+    "item": 7,
+    "name": "Ohio",
+    "cases": 988298,
+    "deaths": 17870,
+    "casesStr": "988,298",
+    "deathsStr": "17,870"
+  },
+  {
+    "item": 8,
+    "name": "Pennsylvania",
+    "cases": 966538,
+    "deaths": 24510,
+    "casesStr": "966,538",
+    "deathsStr": "24,510"
+  },
+  {
+    "item": 9,
+    "name": "North Carolina",
+    "cases": 882715,
+    "deaths": 11691,
+    "casesStr": "882,715",
+    "deathsStr": "11,691"
+  },
+  {
+    "item": 10,
+    "name": "New Jersey",
+    "cases": 834547,
+    "deaths": 23888,
+    "casesStr": "834,547",
+    "deathsStr": "23,888"
+  }
+]

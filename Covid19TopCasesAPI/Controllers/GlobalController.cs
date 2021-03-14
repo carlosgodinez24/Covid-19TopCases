@@ -244,9 +244,11 @@ namespace Covid19TopCasesAPI.Controllers
                         }
                         //Get the TOP 10 of regions/provinces with most COVID-19 cases
                         var topList = genericList.OrderByDescending(a => a.Cases).Take(10).ToList();
-                        //Adding commas in thousands places 
+                        //Adding correlatives and commas in thousands places
+                        int i = 0;
                         topList.ForEach(a =>
                         {
+                            a.Item = ++i;
                             a.CasesStr = string.Format("{0:n0}", a.Cases);
                             a.DeathsStr = string.Format("{0:n0}", a.Deaths);
                         });
