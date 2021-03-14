@@ -202,70 +202,59 @@ namespace Covid19TopCasesAPI.Controllers
                     {
                         //Deserialization of JSON data COVID-19 cases around the world
                         var globalReport = JsonConvert.DeserializeObject<GlobalReport>(responseReport.Content).Data.ToList();
+                        //Definition of generic list to store the top regions/provinces with most COVID-19 cases
+                        var genericList = new List<TopStatistics>();
                         //
                         // TOP 10 GLOBAL DATA / COVID-19
                         //
                         if (string.IsNullOrEmpty(regionIso))
                         {
-                            //Definition of generic list to store COVID-19 data per region
-                            var genericList = new List<TopRegionsStatistics>();
                             //Deserialization of Regions Data (JSON)
                             var regionCatalog = JsonConvert.DeserializeObject<RegionCatalog>(responseCatalog.Content).Data.ToList();
                             //Iteration of the region catalog to sum COVID-19 data per region
                             regionCatalog.ForEach(r =>
                             {
-                                var regionStatistic = new TopRegionsStatistics()
+                                var regionStatistic = new TopStatistics()
                                 {
-                                    Region = r.Name,
+                                    Name = r.Name,
                                     Cases = globalReport.Where(g => r.Iso.Equals(g.Region.Iso)).ToList().Sum(g => g.Confirmed),
                                     Deaths = globalReport.Where(g => r.Iso.Equals(g.Region.Iso)).ToList().Sum(g => g.Deaths)
                                 };
                                 genericList.Add(regionStatistic);
                             });
-                            //Get the TOP 10 of regions with most COVID-19 cases
-                            var topList = genericList.OrderByDescending(a => a.Cases).Take(10).ToList();
-                            //Adding commas in thousands places 
-                            topList.ForEach(a =>
-                            {
-                                a.CasesStr = string.Format("{0:n0}", a.Cases);
-                                a.DeathsStr = string.Format("{0:n0}", a.Deaths);
-                            });
-                            response.Data = topList; //Top 10 list is added to response
                         }
                         //
                         // TOP 10 PROVINCES BY REGION / COVID-19
                         //
                         else
                         {
-                            //Definition of generic list to store COVID-19 data per province
-                            var genericList = new List<TopProvincesStatistics>();
                             //Deserialization of Provinces Data (JSON)
                             var provinceCatalog = JsonConvert.DeserializeObject<ProvinceCatalog>(responseCatalog.Content).Data.ToList();
                             //Iteration of the region catalog to sum COVID-19 data per region
                             provinceCatalog.ForEach(p =>
                             {
-                                var provinceStatistic = new TopProvincesStatistics()
+                                var provinceStatistic = new TopStatistics()
                                 {
-                                    Province = string.IsNullOrEmpty(p.Province) ? p.Name : p.Province,
+                                    Name = string.IsNullOrEmpty(p.Province) ? p.Name : p.Province,
                                     Cases = globalReport.Where(g => p.Province.Equals(g.Region.Province)).ToList().Sum(g => g.Confirmed),
                                     Deaths = globalReport.Where(g => p.Province.Equals(g.Region.Province)).ToList().Sum(g => g.Deaths)
                                 };
                                 genericList.Add(provinceStatistic);
                             });
-                            //Get the TOP 10 of provinces with most COVID-19 cases
-                            var topList = genericList.OrderByDescending(a => a.Cases).Take(10).ToList();
-                            //Adding commas in thousands places 
-                            topList.ForEach(a =>
-                            {
-                                a.CasesStr = string.Format("{0:n0}", a.Cases);
-                                a.DeathsStr = string.Format("{0:n0}", a.Deaths);
-                            });
-                            response.Data = topList; //Top 10 list is added to response
                         }
+                        //Get the TOP 10 of regions/provinces with most COVID-19 cases
+                        var topList = genericList.OrderByDescending(a => a.Cases).Take(10).ToList();
+                        //Adding commas in thousands places 
+                        topList.ForEach(a =>
+                        {
+                            a.CasesStr = string.Format("{0:n0}", a.Cases);
+                            a.DeathsStr = string.Format("{0:n0}", a.Deaths);
+                        });
                         //Preparing the RESTful API Successful response
                         response.Status = (int)responseReport.StatusCode;
                         response.Code = "OK";
                         response.Message = "Data obtained successfully";
+                        response.Data = topList; //Top 10 list is added to response
                         return Ok(response);
                     }
                     else //Another status code from the RapidAPI (Global Report)

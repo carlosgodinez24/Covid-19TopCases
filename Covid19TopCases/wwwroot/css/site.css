@@ -194,6 +194,10 @@ body {*/
     margin-top: 1rem !important;
 }
 
+.header-img{
+    margin-top: -5px;
+}
+
 label, .form-control {
     font-size: 0.9rem !important;
 }

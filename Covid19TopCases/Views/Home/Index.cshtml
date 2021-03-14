@@ -1,12 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
-@*<div class="text-center">
-        <h1 class="display-4">Welcome</h1>
-        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    </div>*@
-
 <h4 class="frm-group-header">TOP 10 COVID-19 CASES</h4>
 <hr class="frm-group-hr" />
 <main role="main" class="pb-3">
@@ -23,94 +17,33 @@
                 </div>
             </div>
             <div class="col-sm-2">
-                <a id="btnReport" class="btn btn-outline-secondary" href="#" role="button"><img src="~/img/search.png" alt="Report icon"/> Report</a>
+                <a id="btnReport" class="btn btn-outline-secondary" href="#" role="button"><img src="~/img/search.png" alt="Report icon" /> Report</a>
             </div>
             <br /><br />
             <div class="col-sm-2">
-                <a id="btnXML" class="btn btn-outline-secondary" href="#" role="button"><img src="~/img/xml.png" alt="XML icon"/>Export as XML</a>
+                <a id="btnXML" class="btn btn-outline-secondary" href="#" role="button"><img src="~/img/xml.png" alt="XML icon" /> Export as XML</a>
             </div>
             <br /><br />
             <div class="col-sm-2">
-                <a id="btnJSON" class="btn btn-outline-secondary" href="#" role="button"><img src="~/img/json.png" alt="JSON icon"/>Export as JSON</a>
+                <a id="btnJSON" class="btn btn-outline-secondary" href="#" role="button"><img src="~/img/json.png" alt="JSON icon" /> Export as JSON</a>
             </div>
             <br /><br />
             <div class="col-sm-2">
-                <a id="btnCSV" class="btn btn-outline-secondary" href="#" role="button"><img src="~/img/csv.png" alt="CSV icon"/>Export as CSV</a>
+                <a id="btnCSV" class="btn btn-outline-secondary" href="#" role="button"><img src="~/img/csv.png" alt="CSV icon" /> Export as CSV</a>
             </div>
         </div>
         <br />
         <div id="grid">
-            <table class="table">
+            <table id="gridData" class="table">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Region</th>
-                        <th scope="col">Cases</th>
-                        <th scope="col">Deaths</th>
+                        <th id="thFilterType" scope="col">REGION</th>
+                        <th scope="col">CASES</th>
+                        <th scope="col">DEATHS</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>USA</td>
-                        <td>3,000,000</td>
-                        <td>823,202</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>USA</td>
-                        <td>3,000,000</td>
-                        <td>823,202</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>USA</td>
-                        <td>3,000,000</td>
-                        <td>823,202</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">4</th>
-                        <td>USA</td>
-                        <td>3,000,000</td>
-                        <td>823,202</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">5</th>
-                        <td>USA</td>
-                        <td>3,000,000</td>
-                        <td>823,202</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">6</th>
-                        <td>USA</td>
-                        <td>3,000,000</td>
-                        <td>823,202</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">7</th>
-                        <td>USA</td>
-                        <td>3,000,000</td>
-                        <td>823,202</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">8</th>
-                        <td>USA</td>
-                        <td>3,000,000</td>
-                        <td>823,202</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">9</th>
-                        <td>USA</td>
-                        <td>3,000,000</td>
-                        <td>823,202</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">10</th>
-                        <td>USA</td>
-                        <td>3,000,000</td>
-                        <td>823,202</td>
-                    </tr>
-                </tbody>
+                <tbody id="tbodyGrid"></tbody>
             </table>
         </div>
         <br />
@@ -118,4 +51,5 @@
 </main>
 <script>
     window.RegionsCatalogEndpoint = "@Url.Action("Regions", "Home")";
+    window.GlobalReportEndpoint = "@Url.Action("Report", "Home")";
 </script>

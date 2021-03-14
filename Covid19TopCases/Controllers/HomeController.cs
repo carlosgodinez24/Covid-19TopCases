@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using RestSharp;
 using System.Net;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Covid19TopCases.Controllers
 {
@@ -71,6 +72,90 @@ namespace Covid19TopCases.Controllers
                     StackTrace = responseCatalog.StackTrace,
                     TransactionDateTime = responseCatalog.TransactionDateTime,
                     Data = JsonConvert.DeserializeObject<List<RegionObject>>(responseCatalog.Data.ToString())
+                };
+                return StatusCode((int)responseAPI.StatusCode, response);
+            }
+            catch (Exception ex)
+            {
+                var response = new ServiceResponse()
+                {
+                    Status = (int)HttpStatusCode.InternalServerError,
+                    Code = "ERROR",
+                    Message = "An internal error occurred while obtaining the regions catalog, please try again later.",
+                    ErrorMessage = "500 Internal Server Error | " + ex.Message,
+                    StackTrace = ex.StackTrace,
+                    TransactionDateTime = DateTime.Now,
+                    Data = new List<object>()
+                };
+                return StatusCode((int)HttpStatusCode.InternalServerError, response);
+            }
+        }
+
+        /// <summary>
+        /// Service that obtains COVID-19 top global statistics
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost(nameof(Report))]
+        public ActionResult Report([FromBody] RequestCovid19Stats requestCovid19Stats)
+        {
+            try
+            {
+                //Get the parameters from appsettings.json
+                var globalReportEndpoint = configuration.GetValue<string>("RESTfulAPISettings:GlobalReportEndpoint");
+                var xApiKey = configuration.GetValue<string>("RESTfulAPISettings:Headers:x-rapidapi-key");
+
+                //Parameters from appsettings.json are validated
+                if (string.IsNullOrEmpty(globalReportEndpoint))
+                {
+                    throw new Exception("Global report endpoint is not configured");
+                }
+                if (string.IsNullOrEmpty(xApiKey))
+                {
+                    throw new Exception("API key is not configured");
+                }
+
+                //Request is validated
+                if (requestCovid19Stats == null)
+                {
+                    //Bad Request
+                    var response400 = new ServiceResponse
+                    {
+                        Status = (int)HttpStatusCode.BadRequest,
+                        Code = "ERROR",
+                        Message = "We are sorry, the request sent is not valid.",
+                        ErrorMessage = "400 Bad Request",
+                        StackTrace = string.Empty
+                    };
+                    return BadRequest(response400);
+                }
+
+                //Get ISO from request
+                var regionIso = requestCovid19Stats.RegionIso?.Trim();
+
+                //Get the JSON serialization from the object request
+                var contractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                };
+
+                var json = JsonConvert.SerializeObject(requestCovid19Stats, new JsonSerializerSettings
+                {
+                    ContractResolver = contractResolver,
+                    NullValueHandling = NullValueHandling.Ignore
+                });
+
+                //RESTful API Global Report Consumption and Deserialization
+                IRestResponse responseAPI = RESTfulApiResponse(globalReportEndpoint, Method.POST, xApiKey, json);
+                var responseReport = JsonConvert.DeserializeObject<ServiceResponse>(responseAPI.Content);
+                var response = new ServiceResponse()
+                {
+                    Status = (int)responseAPI.StatusCode,
+                    Code = responseReport.Code,
+                    Message = responseReport.Message,
+                    ErrorMessage = responseReport.ErrorMessage,
+                    StackTrace = responseReport.StackTrace,
+                    TransactionDateTime = responseReport.TransactionDateTime,
+                    Data = JsonConvert.DeserializeObject<List<TopStatistics>>(responseReport.Data.ToString())
                 };
                 return StatusCode((int)responseAPI.StatusCode, response);
             }

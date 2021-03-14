@@ -113,23 +113,11 @@ namespace Covid19TopCasesClassLibrary
     }
 
     /// <summary>
-    /// TOP 10 regions with most COVID-19 cases
+    /// TOP 10 regions/provinces with most COVID-19 cases
     /// </summary>
-    public class TopRegionsStatistics
+    public class TopStatistics
     {
-        public string Region { get; set; }
-        public long Cases { get; set; }
-        public long Deaths { get; set; }
-        public string CasesStr { get; set; }
-        public string DeathsStr { get; set; }
-    }
-
-    /// <summary>
-    /// TOP 10 provinces with most COVID-19 cases / parameterizing region's ISO
-    /// </summary>
-    public class TopProvincesStatistics
-    {
-        public string Province { get; set; }
+        public string Name { get; set; }
         public long Cases { get; set; }
         public long Deaths { get; set; }
         public string CasesStr { get; set; }
