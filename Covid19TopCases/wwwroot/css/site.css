@@ -162,3 +162,8 @@ label, .form-control {
 .k-filter-row th, .k-grid-header th.k-header {
     white-space: normal !important;
 }
+
+.middle-left {
+    display: flex !important;
+    align-items: end !important;
+}

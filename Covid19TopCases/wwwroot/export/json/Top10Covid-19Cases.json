@@ -1,82 +1,82 @@
 [
   {
     "item": 1,
-    "name": "California",
-    "cases": 3620317,
-    "deaths": 56402,
-    "casesStr": "3,620,317",
-    "deathsStr": "56,402"
+    "name": "US",
+    "cases": 90567290,
+    "deaths": 1027369,
+    "casesStr": "90,567,290",
+    "deathsStr": "1,027,369"
   },
   {
     "item": 2,
-    "name": "Texas",
-    "cases": 2724607,
-    "deaths": 46366,
-    "casesStr": "2,724,607",
-    "deathsStr": "46,366"
+    "name": "India",
+    "cases": 43920451,
+    "deaths": 526110,
+    "casesStr": "43,920,451",
+    "deathsStr": "526,110"
   },
   {
     "item": 3,
-    "name": "Florida",
-    "cases": 1973109,
-    "deaths": 32225,
-    "casesStr": "1,973,109",
-    "deathsStr": "32,225"
+    "name": "France",
+    "cases": 33751295,
+    "deaths": 152600,
+    "casesStr": "33,751,295",
+    "deathsStr": "152,600"
   },
   {
     "item": 4,
-    "name": "New York",
-    "cases": 1734676,
-    "deaths": 48850,
-    "casesStr": "1,734,676",
-    "deathsStr": "48,850"
+    "name": "Brazil",
+    "cases": 33621965,
+    "deaths": 677143,
+    "casesStr": "33,621,965",
+    "deathsStr": "677,143"
   },
   {
     "item": 5,
-    "name": "Illinois",
-    "cases": 1207757,
-    "deaths": 23189,
-    "casesStr": "1,207,757",
-    "deathsStr": "23,189"
+    "name": "Germany",
+    "cases": 30476605,
+    "deaths": 143364,
+    "casesStr": "30,476,605",
+    "deathsStr": "143,364"
   },
   {
     "item": 6,
-    "name": "Georgia",
-    "cases": 1032967,
-    "deaths": 18216,
-    "casesStr": "1,032,967",
-    "deathsStr": "18,216"
+    "name": "United Kingdom",
+    "cases": 23422751,
+    "deaths": 183416,
+    "casesStr": "23,422,751",
+    "deathsStr": "183,416"
   },
   {
     "item": 7,
-    "name": "Ohio",
-    "cases": 988298,
-    "deaths": 17870,
-    "casesStr": "988,298",
-    "deathsStr": "17,870"
+    "name": "Italy",
+    "cases": 20684182,
+    "deaths": 170979,
+    "casesStr": "20,684,182",
+    "deathsStr": "170,979"
   },
   {
     "item": 8,
-    "name": "Pennsylvania",
-    "cases": 966538,
-    "deaths": 24510,
-    "casesStr": "966,538",
-    "deathsStr": "24,510"
+    "name": "Korea, South",
+    "cases": 19346764,
+    "deaths": 24907,
+    "casesStr": "19,346,764",
+    "deathsStr": "24,907"
   },
   {
     "item": 9,
-    "name": "North Carolina",
-    "cases": 882715,
-    "deaths": 11691,
-    "casesStr": "882,715",
-    "deathsStr": "11,691"
+    "name": "Russia",
+    "cases": 18268570,
+    "deaths": 374444,
+    "casesStr": "18,268,570",
+    "deathsStr": "374,444"
   },
   {
     "item": 10,
-    "name": "New Jersey",
-    "cases": 834547,
-    "deaths": 23888,
-    "casesStr": "834,547",
-    "deathsStr": "23,888"
+    "name": "Turkey",
+    "cases": 15524071,
+    "deaths": 99184,
+    "casesStr": "15,524,071",
+    "deathsStr": "99,184"
   }
 ]

@@ -3,61 +3,61 @@
   <Region>
     <Item>1</Item>
     <Name>US</Name>
-    <Cases>29,399,980</Cases>
-    <Deaths>534,291</Deaths>
+    <Cases>90,567,290</Cases>
+    <Deaths>1,027,369</Deaths>
   </Region>
   <Region>
     <Item>2</Item>
-    <Name>Brazil</Name>
-    <Cases>11,439,558</Cases>
-    <Deaths>277,102</Deaths>
+    <Name>India</Name>
+    <Cases>43,920,451</Cases>
+    <Deaths>526,110</Deaths>
   </Region>
   <Region>
     <Item>3</Item>
-    <Name>India</Name>
-    <Cases>11,359,048</Cases>
-    <Deaths>158,607</Deaths>
+    <Name>France</Name>
+    <Cases>33,751,295</Cases>
+    <Deaths>152,600</Deaths>
   </Region>
   <Region>
     <Item>4</Item>
-    <Name>Russia</Name>
-    <Cases>4,331,396</Cases>
-    <Deaths>90,169</Deaths>
+    <Name>Brazil</Name>
+    <Cases>33,621,965</Cases>
+    <Deaths>677,143</Deaths>
   </Region>
   <Region>
     <Item>5</Item>
-    <Name>United Kingdom</Name>
-    <Cases>4,267,015</Cases>
-    <Deaths>125,701</Deaths>
+    <Name>Germany</Name>
+    <Cases>30,476,605</Cases>
+    <Deaths>143,364</Deaths>
   </Region>
   <Region>
     <Item>6</Item>
-    <Name>France</Name>
-    <Cases>4,105,527</Cases>
-    <Deaths>90,376</Deaths>
+    <Name>United Kingdom</Name>
+    <Cases>23,422,751</Cases>
+    <Deaths>183,416</Deaths>
   </Region>
   <Region>
     <Item>7</Item>
     <Name>Italy</Name>
-    <Cases>3,201,838</Cases>
-    <Deaths>101,881</Deaths>
+    <Cases>20,684,182</Cases>
+    <Deaths>170,979</Deaths>
   </Region>
   <Region>
     <Item>8</Item>
-    <Name>Spain</Name>
-    <Cases>3,183,704</Cases>
-    <Deaths>72,258</Deaths>
+    <Name>Korea, South</Name>
+    <Cases>19,346,764</Cases>
+    <Deaths>24,907</Deaths>
   </Region>
   <Region>
     <Item>9</Item>
-    <Name>Turkey</Name>
-    <Cases>2,866,012</Cases>
-    <Deaths>29,421</Deaths>
+    <Name>Russia</Name>
+    <Cases>18,268,570</Cases>
+    <Deaths>374,444</Deaths>
   </Region>
   <Region>
     <Item>10</Item>
-    <Name>Germany</Name>
-    <Cases>2,569,864</Cases>
-    <Deaths>73,369</Deaths>
+    <Name>Turkey</Name>
+    <Cases>15,524,071</Cases>
+    <Deaths>99,184</Deaths>
   </Region>
 </Regions>

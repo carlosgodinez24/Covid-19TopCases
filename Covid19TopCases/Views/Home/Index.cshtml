@@ -6,49 +6,77 @@
 <main role="main" class="pb-3">
     <div id="example">
         <div class="form-row">
-            <div class="col-sm-4">
-                <div class="form-row col-md-12">
-                    <div class="col-4 col-sm-4">
-                        <label for="cmbRegion" class="detail-tag">Region:</label>
-                    </div>
-                    <div class="col-8 col-sm-8">
-                        <select id="cmbRegion" class="form-control" required=""></select>
-                    </div>
-                </div>
-            </div>
+            <div id="combobox" class="col-sm-4 pb-3"></div>
             <div class="col-sm-2">
-                <a id="btnReport" class="btn btn-outline-secondary" href="#" role="button"><img src="~/img/search.png" alt="Report icon" /> Report</a>
+                <a id="btnReport" class="btn btn-outline-secondary btn-block" href="#" role="button"><img src="~/img/search.png" alt="Report icon" /> Report</a>
             </div>
             <br /><br />
             <div class="col-sm-2">
-                <a id="btnXML" class="btn btn-outline-secondary" href="#" role="button"><img src="~/img/xml.png" alt="XML icon" /> Export as XML</a>
+                <a id="btnXML" class="btn btn-outline-secondary btn-block" href="#" role="button"><img src="~/img/xml.png" alt="XML icon" /> Export as XML</a>
             </div>
             <br /><br />
             <div class="col-sm-2">
-                <a id="btnJSON" class="btn btn-outline-secondary" href="#" role="button"><img src="~/img/json.png" alt="JSON icon" /> Export as JSON</a>
+                <a id="btnJSON" class="btn btn-outline-secondary btn-block" href="#" role="button"><img src="~/img/json.png" alt="JSON icon" /> Export as JSON</a>
             </div>
             <br /><br />
             <div class="col-sm-2">
-                <a id="btnCSV" class="btn btn-outline-secondary" href="#" role="button"><img src="~/img/csv.png" alt="CSV icon" /> Export as CSV</a>
+                <a id="btnCSV" class="btn btn-outline-secondary btn-block" href="#" role="button"><img src="~/img/csv.png" alt="CSV icon" /> Export as CSV</a>
             </div>
         </div>
         <br />
-        <div id="grid">
-            <table id="gridData" class="table">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th id="thFilterType" scope="col">REGION</th>
-                        <th scope="col">CASES</th>
-                        <th scope="col">DEATHS</th>
-                    </tr>
-                </thead>
-                <tbody id="tbodyGrid"></tbody>
-            </table>
-        </div>
+        <div id="grid"></div>
         <br />
     </div>
 </main>
+<!-- Rendering regions using HTML DataList -->
+@*<script id="regionsTemplate" type="text/x-jsrender">
+    <input type="text" class="form-control" list="items" id="cmbRegion" placeholder="Select Region" style="margin-left: 12px;"> 
+    <datalist id="items">
+        <option data-value="">* All regions *</option>
+        {{for data}}
+        <option data-value="{{:iso}}">{{:name}}</option>
+        {{/for}}
+    </datalist>
+</script>*@
+<!-- Rendering regions using HTML bootstrap-select (selectpicker) -->
+<script id="regionsTemplate" type="text/x-jsrender">
+    <div class="form-row col-md-12">
+        <div class="col-4 col-sm-4 middle-left">
+            <label for="regionSelect">Region:</label>
+        </div>
+        <div class="col-8 col-sm-8">
+            <select id="regionSelect" class="form-control" data-live-search="true">
+                <option value="" selected="">* All regions *</option>
+                {{for data}}
+                <option value="{{:iso}}">{{:name}}</option>
+                {{/for}}
+            </select>
+        </div>
+    </div>
+</script>
+<!-- Rendering global report using generic HTML table -->
+<script id="globalReportTemplate" type="text/x-jsrender">
+    <table id="gridData" class="table table-responsive-lg">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th id="thFilterType" scope="col">{{:data.gridHeader}}</th>
+                <th scope="col">CASES</th>
+                <th scope="col">DEATHS</th>
+            </tr>
+        </thead>
+        <tbody id="tbodyGrid">
+            {{for data}}
+            <tr>
+                <th scope="row">{{:item}}</th>
+                <td>{{:name}}</td>
+                <td>{{:casesStr}}</td>
+                <td>{{:deathsStr}}</td>
+            </tr>
+            {{/for}}
+        </tbody>
+    </table>
+</script>
 <script>
     //Definition of RESTful API's endpoints
     window.RegionsCatalogEndpoint = "@Url.Action("Regions", "Home")";
@@ -60,3 +88,4 @@
     //Definition of downloaded filename
     window.DownloadedFileName = "@ViewBag.DownloadedFileName";
 </script>
+

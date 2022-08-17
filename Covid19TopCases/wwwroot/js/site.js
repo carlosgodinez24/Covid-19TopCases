@@ -1,5 +1,15 @@
 ﻿/*
 =========================================================
+* DOCUMENT - READY
+=========================================================
+*/
+$(document).ready(function () {
+    getRegionsCatalog(window.RegionsCatalogEndpoint); //Consume region service catalog when the page is initialized
+    getGlobalReport(window.GlobalReportEndpoint); //Consume global data service when the page is initialized 
+});
+
+/*
+=========================================================
 * AJAX REQUEST API
 =========================================================
 */
@@ -47,29 +57,16 @@ function executeAjaxAPI(url, request, requestType, callback) {
 
 /*
 =========================================================
-* DOCUMENT - READY
-=========================================================
-*/
-$(document).ready(function () {
-    getRegionsCatalog(window.RegionsCatalogEndpoint);
-});
-
-/*
-=========================================================
 * REGIONS CATALOG
 =========================================================
 */
 function getRegionsCatalog(url) {
     executeAjaxAPI(url, null, 'GET', function (response) {
-        console.log('[site.js] Service response => ' + url);
+        console.log('[site.js] url regions => ' + url);
         console.log(response);
-        let dropdown = $('#cmbRegion');
-        dropdown.append('<option value="" selected="">All regions</option>'); //Adding "all" filter
-        //Populate dropdown region in iteration
-        $.each(response.data, function (key, entry) {
-            dropdown.append($('<option></option>').attr('value', entry.iso).text(entry.name));
-        });
-        getGlobalReport(window.GlobalReportEndpoint); //Consume global data service when the page is initialized
+        $('#combobox').html($('#regionsTemplate').render(response));
+        $('#regionSelect').addClass('selectpicker'); //Adding 'selectpicker' class once the component is rendered
+        $('.selectpicker').selectpicker('refresh'); //Init and refresh selectpicker function
     });
 }
 
@@ -79,33 +76,17 @@ function getRegionsCatalog(url) {
 =========================================================
 */
 function getGlobalReport(url) {
-    //Remove past elements from the grid
-    $('#tbodyGrid').remove();
     //Preparing the request
-    var regionIsoP = $('#cmbRegion').val();
     var request = {
-        regionIso: regionIsoP
+        regionIso: $('#regionSelect').val() ? $('#regionSelect').val() : ''
     }
-    $('#thFilterType').text((request.regionIso === '') ? 'REGION' : 'PROVINCE'); //Setting the filter type at the column header of the grid
+    console.log('[site.js] url global report => ' + url);
+    console.log('[site.js] Request global report => ');
     console.log(request);
     executeAjaxAPI(url, request, 'POST', function (response) {
-        console.log('[site.js] Service response => ' + url);
+        response.data.gridHeader = request.regionIso === '' ? 'REGION' : 'PROVINCE'; //Adding "gridHeader" property
         console.log(response);
-        var tbodyGrid = $("<tbody>", { id: 'tbodyGrid' });
-        tbodyGrid.appendTo('#gridData');
-        //Populate grid in iteration
-        $.each(response.data, function (key, entry) {
-            var tr = $("<tr>", { id: 'trStat' + entry.item });
-            var th = $("<th>", { scope: 'row', text: entry.item });
-            var tdName = $("<td>", { text: entry.name });
-            var tdCases = $("<td>", { text: entry.casesStr });
-            var tdDeaths = $("<td>", { text: entry.deathsStr });
-            $('#tbodyGrid').append(tr);
-            $('#trStat' + entry.item).append(th);
-            $('#trStat' + entry.item).append(tdName);
-            $('#trStat' + entry.item).append(tdCases);
-            $('#trStat' + entry.item).append(tdDeaths);
-        });
+        $('#grid').html($('#globalReportTemplate').render(response));
         $('#loader').fadeOut();
     });
 }
@@ -163,7 +144,7 @@ function downloadFile(urlService, fileName, fileExtension) {
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
-            swalSuccessMessage('Your XML file has been created successfully.')
+            swalSuccessMessage('Your ' + fileExtension.toUpperCase() +' file has been created successfully.')
         })
         .catch(() => swalErrorMessage('ERROR', 'An error has ocurred during the XML file creation'));
 }
